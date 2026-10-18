@@ -1,0 +1,26 @@
+---
+- name: Create users and configure Message of the Day banner.
+  hosts: all
+  become: true
+  vars:
+    team:
+      - alice
+      - bob
+      - carol
+    env_type: prod
+    password: "$6$INrhzVZK8ijssrCt$5OBPFrVKvWl1H4kbmoLcDNnic1Z4YKU.90VlFu86/.SPDSqZYs.EyNvgjbggdmTlpKVX8O6zvYQ95sf.I6m0D."
+
+  tasks:
+    - name: Create users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        password: "{{ password }}"
+        update_password: on_create
+        shell: /bin/bash
+        state: present
+      loop: "{{ team }}"
+
+    - name: Create MOTD banner
+      ansible.builtin.template:
+        src: templates/motd.j2
+        dest: /etc/motd

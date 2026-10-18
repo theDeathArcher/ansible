@@ -1,0 +1,31 @@
+---
+- name: Install and configure nginx
+  hosts: all
+  become: true
+  vars:
+    nginx_port: 8008
+
+  tasks:
+    - name: Install nginx package with dnf
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Upload nginx configuration
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        validate: nginx -t -c %s
+      notify: Restart nginx service
+
+    - name: Enable and start nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Restart nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,5 @@
+---
+ansible hosts -b -K -m ansible.builtin.dnf -a "name=tmux state=present"
+---
+ansible hosts -b -K -m ansible.builtin.copy -a "content='Managed by Ansible' dest=/etc/motd"
+ansible hosts -b -K -a "cat /etc/motd"

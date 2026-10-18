@@ -1,0 +1,32 @@
+---
+- name: Install and configure chrony daemon
+  hosts: all
+  become: true
+  vars:
+    ntp_servers:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+
+  tasks:
+    - name: Install chrony
+      ansible.builtin.dnf:
+        name: chrony
+        state: present
+
+    - name: Configure chrony
+      ansible.builtin.template:
+        src: templates/chrony.conf.j2
+        dest: /etc/chrony.conf
+      notify: Restart chrony
+
+    - name: Enable and start chrony
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Restart chrony
+      ansible.builtin.service:
+        name: chronyd
+        state: restarted

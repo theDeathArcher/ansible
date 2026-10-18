@@ -1,0 +1,11 @@
+---
+- name: Create deploy user
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Create deploy user
+      ansible.builtin.user:
+        name: deploy
+        shell: /bin/bash
+        password: $6$1mNXCwEcih93TGzS$juBDUaz2GFwPh4Mmlqip6ajIDzwqE0HwzrQ08MnNgdS4feshKLAbbfUwSrU8dfFwHKuxl65seRSWIYY/esFG./

@@ -1,0 +1,12 @@
+Welcome to {{ ansible_hostname }}!
+
+{% if env_type == "prod" %}
+PRODUCTION - be careful
+{% else %}
+Lab environment
+{% endif %}
+
+Team:
+{% for member in team %}
+- {{ member }}
+{% endfor %}
